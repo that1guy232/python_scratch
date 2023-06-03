@@ -2,6 +2,7 @@ import pygame
 import pygame_gui
 
 import os
+import subprocess
 
 
 from projects_settings import *
@@ -67,7 +68,9 @@ class App:
                     for i, button in enumerate(self.buttons):
                         if event.ui_element == button:
                             print(self.folders[i])
-                            os.system(f"python {self.folders[i]}/main.py")
+                            # can we start a new process here?
+                            subprocess.Popen(["python", os.path.join(self.folders[i], "main.py")])
+                            #os.system(f"python {self.folders[i]}/main.py")
 
 
             self.ui_manager.process_events(event)

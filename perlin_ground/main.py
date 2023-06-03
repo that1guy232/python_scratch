@@ -11,9 +11,9 @@ class Game:
         pygame.init()
         self.process = psutil.Process(os.getpid())
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
-       
+
         pygame.display.set_caption("My Game")
-        
+
         self.clock = pygame.time.Clock()
         self.running = True
         self.delta_time = 0
@@ -35,7 +35,6 @@ class Game:
         self.camera_y = 0  # vertical position of the camera
         self.camera_speed = 2  # how fast the camera moves each frame
 
-
         self.terrain = [[0 for _ in range(self.rows)] for _ in range(self.cols)]
         self.noise_generator = OpenSimplex(0)
 
@@ -44,35 +43,33 @@ class Game:
             relative_rect=pygame.Rect((20, 20), (200, 20)),
             start_value=20,
             value_range=(10, 50),
-            manager=self.ui_manager
+            manager=self.ui_manager,
         )
 
         self.flying_slider = pygame_gui.elements.UIHorizontalSlider(
             relative_rect=pygame.Rect((20, 50), (200, 20)),
             start_value=0,
             value_range=(-0.02, 0.02),
-            manager=self.ui_manager
+            manager=self.ui_manager,
         )
 
         self.noise_slider = pygame_gui.elements.UIHorizontalSlider(
             relative_rect=pygame.Rect((20, 80), (200, 20)),
             start_value=0.2,
             value_range=(0.05, 0.5),
-            manager=self.ui_manager
+            manager=self.ui_manager,
         )
-
-
 
         self.reset_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((20, 140), (100, 20)),
-            text='Reset',
-            manager=self.ui_manager
+            text="Reset",
+            manager=self.ui_manager,
         )
 
         self.pause_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((130, 140), (100, 20)),
-            text='Pause',
-            manager=self.ui_manager
+            text="Pause",
+            manager=self.ui_manager,
         )
 
         self.run()
@@ -94,16 +91,17 @@ class Game:
 
             if event.type == pygame.USEREVENT:
                 if event.user_type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
-                 
                     if event.ui_element == self.scale_slider:
                         self.scl = int(self.scale_slider.get_current_value())
                         self.cols = SCREEN_SIZE[0] // self.scl
                         self.rows = SCREEN_SIZE[1] // self.scl
-                        self.terrain = [[0 for _ in range(self.rows)] for _ in range(self.cols)]
-                
+                        self.terrain = [
+                            [0 for _ in range(self.rows)] for _ in range(self.cols)
+                        ]
+
                     elif event.ui_element == self.flying_slider:
                         self.flying = self.flying_slider.get_current_value()
-               
+
                     elif event.ui_element == self.noise_slider:
                         self.noise_increment = self.noise_slider.get_current_value()
 
@@ -112,7 +110,9 @@ class Game:
                         self.reset()
                     if event.ui_element == self.pause_button:
                         self.update_terrain = not self.update_terrain
-                        self.pause_button.set_text("Resume" if not self.update_terrain else "Pause")
+                        self.pause_button.set_text(
+                            "Resume" if not self.update_terrain else "Pause"
+                        )
 
             # pressed and released keys
             if event.type == pygame.KEYDOWN:
@@ -125,7 +125,6 @@ class Game:
                     self.pressed_keys.append(pygame.K_s)
                 if event.key == pygame.K_d:
                     self.pressed_keys.append(pygame.K_d)
-
 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
@@ -140,7 +139,6 @@ class Game:
             self.ui_manager.process_events(event)
 
     def update(self):
-
         # move the camera
         if pygame.K_w in self.pressed_keys:
             self.camera_y -= self.camera_speed
@@ -151,16 +149,14 @@ class Game:
         if pygame.K_d in self.pressed_keys:
             self.camera_x += self.camera_speed
 
-
-
         if self.update_terrain:
             self.flying -= 0.01
             yoff = self.flying
 
-            for y in range(0, self.rows, 2):  
+            for y in range(0, self.rows, 2):
                 xoff = 0
 
-                for x in range(0, self.cols, 2): 
+                for x in range(0, self.cols, 2):
                     noise_value = self.noise_generator.noise2(xoff, yoff) * 100
                     self.terrain[x][y] = noise_value
                     if x + 1 < self.cols:
@@ -175,7 +171,6 @@ class Game:
 
         self.ui_manager.update(self.delta_time)
 
-        
     def draw(self):
         self.screen.fill("white")
 
@@ -188,9 +183,18 @@ class Game:
                     triangle_surface,
                     (0, 0, 255, 100),
                     [
-                        (x * self.scl - self.camera_x, y * self.scl + self.terrain[x][y] - self.camera_y),
-                        ((x + 1) * self.scl - self.camera_x, y * self.scl + self.terrain[x + 1][y] - self.camera_y),
-                        (x * self.scl - self.camera_x, (y + 1) * self.scl + self.terrain[x][y + 1] - self.camera_y),
+                        (
+                            x * self.scl - self.camera_x,
+                            y * self.scl + self.terrain[x][y] - self.camera_y,
+                        ),
+                        (
+                            (x + 1) * self.scl - self.camera_x,
+                            y * self.scl + self.terrain[x + 1][y] - self.camera_y,
+                        ),
+                        (
+                            x * self.scl - self.camera_x,
+                            (y + 1) * self.scl + self.terrain[x][y + 1] - self.camera_y,
+                        ),
                     ],
                 )
 
@@ -198,9 +202,20 @@ class Game:
                     triangle_surface,
                     (0, 255, 0, 100),
                     [
-                        ((x + 1) * self.scl - self.camera_x, y * self.scl + self.terrain[x + 1][y] - self.camera_y),
-                        ((x + 1) * self.scl - self.camera_x, (y + 1) * self.scl + self.terrain[x + 1][y + 1] - self.camera_y),
-                        (x * self.scl - self.camera_x, (y + 1) * self.scl + self.terrain[x][y + 1] - self.camera_y),
+                        (
+                            (x + 1) * self.scl - self.camera_x,
+                            y * self.scl + self.terrain[x + 1][y] - self.camera_y,
+                        ),
+                        (
+                            (x + 1) * self.scl - self.camera_x,
+                            (y + 1) * self.scl
+                            + self.terrain[x + 1][y + 1]
+                            - self.camera_y,
+                        ),
+                        (
+                            x * self.scl - self.camera_x,
+                            (y + 1) * self.scl + self.terrain[x][y + 1] - self.camera_y,
+                        ),
                     ],
                 )
 
@@ -231,11 +246,8 @@ class Game:
         self.noise_slider.set_current_value(0.2)
         self.pause_button.set_text("Pause")
 
-
     def quit(self):
         self.running = False
-
-
 
 
 if __name__ == "__main__":

@@ -1,4 +1,6 @@
 import pygame
+import pygame_gui
+
 from settings import *
 import psutil
 import os
@@ -11,6 +13,24 @@ class Game:
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
 
         pygame.display.set_caption("My Game")
+
+        self.ui_manager = pygame_gui.UIManager(SCREEN_SIZE)
+
+        text_entry_height = 50
+        self.console_input = pygame_gui.elements.UITextEntryLine(
+            relative_rect=pygame.Rect((0, 0), (SCREEN_WIDTH, text_entry_height)),
+            manager=self.ui_manager,
+        )
+
+        # create a text box under the text entry line
+        self.console_output = pygame_gui.elements.UITextBox(
+            html_text="",
+            relative_rect=pygame.Rect(
+                (0, text_entry_height),
+                (SCREEN_WIDTH, SCREEN_HEIGHT - text_entry_height),
+            ),
+            manager=self.ui_manager,
+        )
 
         self.clock = pygame.time.Clock()
         self.running = True
@@ -33,13 +53,21 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
 
+            # if the enter key is pressed get the text from the text entry line
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                print(self.console_input.get_text())
+
+            self.ui_manager.process_events(event)
+
     def update(self):
+        self.ui_manager.update(self.delta_time)
         pass
 
     def draw(self):
         self.screen.fill("white")
         # Start draw
 
+        self.ui_manager.draw_ui(self.screen)
         # End draw
         mem_info = self.process.memory_info()
         mem_usage = mem_info.rss / (1024 * 1024)  # Convert to MB

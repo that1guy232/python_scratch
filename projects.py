@@ -61,7 +61,6 @@ class App:
             if event.type == pygame.QUIT:
                 self.running = False
 
-
             # handle button events
             if event.type == pygame.USEREVENT:
                 if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
@@ -69,9 +68,10 @@ class App:
                         if event.ui_element == button:
                             print(self.folders[i])
                             # can we start a new process here?
-                            subprocess.Popen(["python", os.path.join(self.folders[i], "main.py")])
-                            #os.system(f"python {self.folders[i]}/main.py")
-
+                            subprocess.Popen(
+                                ["python", os.path.join(self.folders[i], "main.py")]
+                            )
+                            # os.system(f"python {self.folders[i]}/main.py")
 
             self.ui_manager.process_events(event)
 

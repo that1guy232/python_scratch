@@ -1,7 +1,13 @@
-
 TITLE = 'tile_project'
 SCREEN_SCALE = 64
 SCREEN_WIDTH = 16 * SCREEN_SCALE  # 16 * 64 = 1024
 SCREEN_HEIGHT = 9 * SCREEN_SCALE  # 9 * 64 = 576
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 FPS = 90
+# something that goes into the screen size evenly
+
+
+TILE_SIZE = 64
+CHUNK_WIDTH = 16
+CHUNK_HEIGHT = 16
+

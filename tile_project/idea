@@ -1,0 +1,66 @@
+Game:
+    Contains the main game loop, and the main game logic.
+
+    Has the following Objects
+        - Camera
+        - chunks
+        - objectRenderer
+
+    Has the following methods
+        - run() - Runs the main game loop.
+        - update() - Updates the game logic.
+        - draw() - Draws the game.
+        - events() - Handles the events.
+        - quit() - Quits the game.
+        - get_chunk_by_pos() - Returns the chunk at the given position.
+        - get_chunk_by_mouse_pos() - Returns the chunk at the mouse position.
+
+
+Camera:
+    Has the following properties
+        - x, y
+        - width, height
+        - zoom
+
+    Has the following methods
+        - apply() - Returns the adjusted rectangle's position based on the camera's position and zoom.
+        - translate() - Translates the camera's position by the given x and y values.
+        - to_world() - Returns the world position of the given screen position.
+        - to_screen() - Returns the screen position of the given world position.
+
+
+Chunk:
+    Has the following properties
+        - x, y
+        - width, height
+        - tiles
+        - tile_object_map - a map of what objects are on what tiles
+
+    Has the following methods
+        -   add_game_object(object) - Adds the given object to the chunk. Also adds the object to the tile_object_map.
+        -   get_get_objects_on_tile(x, y) - Returns a list of objects on the given tile.
+        -   get_tile_from_tile_pos(x, y) - Returns the tile at the given tile position.
+        -   get_tile_from_world_pos(x, y) - Returns the tile at the given world position.
+        -   update  - Updates all the objects in the chunk.
+        -   draw    - Draws the tiles 
+
+
+Tile:
+    Has the following properties
+        - x, y
+        - width, height
+
+
+GameObject:
+    Has the following properties
+    - x, y
+    - image
+    - z_index
+
+    Has the following methods
+    - update(dt) - Updates the object.
+
+
+GameObjectRenderer:
+    Has the following methods
+    - draw_chunk(screen, camera, chunk) - Draws the given chunk to the screen.

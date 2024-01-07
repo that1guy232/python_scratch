@@ -3,6 +3,7 @@ from settings import *
 import psutil
 import os
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 class Game:
     def __init__(self):

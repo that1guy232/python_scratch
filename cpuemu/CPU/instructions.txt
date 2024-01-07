@@ -1,0 +1,72 @@
+
+[ ] = TBI
+[\] = Needs tests
+[X] = Done
+
+CPU:
+StatusFlags:
+    .C Carry flag
+    .Z Zero flag
+    .B Break flag
+    .V Overflow flag
+    .N Negative flag
+    3 unused bytes.
+
+ Data Transfer Instructions:
+    Loads:
+        [X] LDA: Load Accumulator.      LDA 0x7F - Loads 0x7F into the Accumulator
+        [X] LDX: Load X Register.       LDX 0x7F - Loads 0x7F into the X Register
+        [X] LDY: Load Y Register.       LDY 0x7F - Loads 0x7F into the Y Register
+           Zero flag Set if A = 0,
+           Negative Flag sets if bit 7 of A is set
+
+    Stores:
+        [X] STA: Store Accumulator.    STA 0x5000 - Stores the Accumulator value at memory address 0x5000
+        [X] STX: Store X Register.     STX 0x5000 - Stores the X Register value at memory address 0x5000
+        [X] STY: Store Y Register.     STY 0x5000 - Stores the Y Register value at memory address 0x5000
+            Does not set flags.
+   Transfers:
+        [x] TAX: Transfer Accumulator to X.     TAX - Transfers the Accumulator value to the X Register
+        [x] TAY: Transfer Accumulator to Y.     TAY - Transfers the Accumulator value to the Y Register
+        [x] TXA: Transfer X to Accumulator.     TXA - Transfers the X Register value to the Accumulator
+        [x] TYA: Transfer Y to Accumulator.     TYA - Transfers the Y Register value to the Accumulator
+            Zero flag Set if A = 0,
+            Negative Flag sets if bit 7 of A is set
+
+ Arithmetic / Logic Instructions:
+     Simple Arithmetic:
+         [X] ADC: Add with Carry.       ADC(0x02) 0x7F - Adds 0x7F to the Accumulator with a possible carry
+         [\] SBC: Subtract with Carry.  SBC 0x7F - Subtracts 0x7F from the Accumulator with a possible borrow   #TODO Write Tests
+         [\] INC: Increment.            INC 0x5000 - Increments the value at memory address 0x5000              #TODO Write Tests
+         [\] DEC: Decrement.            DEC 0x5000 - Decrements the value at memory address 0x5000              #TODO Write Tests
+     Logic:
+         [X] AND: Logical AND.       AND 0x7F - Performs a logical AND between 0x7F and the Accumulator
+         [\] ORA: Logical OR.        ORA 0x7F - Performs a logical OR between 0x7F and the Accumulator
+         [\] EOR: Exclusive OR.      EOR 0x7F - Performs an exclusive OR between 0x7F and the Accumulator
+     Compares:
+         [\] CMP: Compare (with accumulator).        CMP 0x7F - Compares 0x7F with the Accumulator
+         [\] CPX: Compare with X.                    CPX 0x7F - Compares 0x7F with the X Register
+         [\] CPY: Compare with Y.                    CPY 0x7F - Compares 0x7F with the Y Register
+
+     Control Instructions:
+         [\] JMP: Jump to another location.                                                    JMP 0x5000 - Jumps to memory address 0x5000
+         [\] JSR: Jump to subroutine (and save return address).                                JSR 0x5000 - Jumps to subroutine at 0x5000 and saves return address
+         [\] RTS: Return from subroutine.                                                      RTS - Returns to the address saved during the last JSR
+         [\] BNE, BEQ, BCC, etc.: Branch instructions based on the status of certain flags.    BNE 0x5000 - Branches to 0x5000 if the Zero flag is not set
+         [X] BRK: Force an interrupt.                                                         BRK - Forces a software interrupt
+
+     Stack Operations:
+         [\] PHA: Push accumulator on the stack.         PHA - Pushes the Accumulator value onto the stack
+         [\] PHP: Push processor status on the stack.    PHP - Pushes the status flags onto the stack
+         [\] PLA: Pull accumulator from the stack.       PLA - Pulls a byte from the stack into the Accumulator
+         [\] PLP: Pull processor status from the stack.  PLP - Pulls a byte from the stack into the status flags
+
+     Status Flag Operations:
+         [\] CLC, CLI, CLV: Clear specific status flags.     CLC - Clears the Carry flag
+         [\] SEC, SEI: Set specific status flags.            SEC - Sets the Carry flag
+
+     Shift and Rotate Instructions:
+         [\] ASL: Arithmetic Shift Left.     ASL 0x5000 - Arithmetic Shifts the value at 0x5000 to the left
+         [\] LSR: Logical Shift Right.       LSR 0x5000 - Logical Shifts the value at 0x5000 to the right
+         [\] ROL: Rotate Left.               ROL 0x5000 - Rotates the value at 0x5000 to the left (with carry)
+         [\] ROR: Rotate Right.              ROR 0x5000 - Rotates the value at 0x5000 to the right (with carry)
